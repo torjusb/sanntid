@@ -14,7 +14,7 @@ type Arrival struct {
 func GetArrivals(locationId int) ([]Arrival, error) {
 	var arrivals []Arrival
 
-	data, err := RequestArrivalData(locationId)
+	data, err := requestArrivalData(locationId)
 
 	if err == nil {
 		for i,j := 0,0; i < len(data); i,j = i+1,j+1 {

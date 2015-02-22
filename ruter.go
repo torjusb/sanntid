@@ -2,7 +2,9 @@ package sanntid
 
 import (
 	"fmt"
-	"github.com/franela/goreq"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
 )
 
 type sanntidMonitoredCall struct {
@@ -18,19 +20,31 @@ type sanntidMonitoredVehicleJourney struct {
 	VehicleMode int
 }
 
+// ArrivalData cointains the parsed data returned from a request to
+// Ruter's API.
 type sanntidArrivalData struct {
 	MonitoredVehicleJourney sanntidMonitoredVehicleJourney
 }
 
-func requestArrivalData(locationId int) ([]sanntidArrivalData, error) {
+// RequestArrivalData retrieves information about the upcoming arrivals for
+// a given location based on its locationId.
+func requestArrivalData(locationID int) ([]sanntidArrivalData, error) {
 	var data []sanntidArrivalData
 
-	url := fmt.Sprintf("http://reisapi.ruter.no/stopvisit/getdepartures/%d", locationId)
-	res, err := goreq.Request{ Uri: url }.Do()
+	url := fmt.Sprintf("http://reisapi.ruter.no/stopvisit/getdepartures/%d", locationID)
 
-	if err == nil {
-		res.Body.FromJsonTo(&data)
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
 	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	json.Unmarshal(body, &data)
 
 	return data, err
 }

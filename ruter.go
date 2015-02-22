@@ -1,23 +1,23 @@
 package sanntid
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 type sanntidMonitoredCall struct {
-	ExpectedArrivalTime string
+	ExpectedArrivalTime   string
 	DeparturePlatformName string
-	DestinationDisplay string
+	DestinationDisplay    string
 }
 
 type sanntidMonitoredVehicleJourney struct {
-	DestinationName string
-	MonitoredCall sanntidMonitoredCall
+	DestinationName   string
+	MonitoredCall     sanntidMonitoredCall
 	PublishedLineName string
-	VehicleMode int
+	VehicleMode       int
 }
 
 // ArrivalData cointains the parsed data returned from a request to

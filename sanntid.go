@@ -17,7 +17,7 @@ func GetArrivals(locationId int) ([]Arrival, error) {
 	data, err := requestArrivalData(locationId)
 
 	if err == nil {
-		for i, j := 0, 0; i < len(data); i, j = i+1, j+1 {
+		for i := 0; i < len(data); i++ {
 			line := Line{
 				data[i].MonitoredVehicleJourney.PublishedLineName,
 				data[i].MonitoredVehicleJourney.DestinationName,

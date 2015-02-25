@@ -18,6 +18,7 @@ type sanntidMonitoredVehicleJourney struct {
 	MonitoredCall     sanntidMonitoredCall
 	PublishedLineName string
 	VehicleMode       int
+	DirectionRef      int `json:",string"`
 }
 
 // ArrivalData cointains the parsed data returned from a request to

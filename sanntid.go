@@ -3,6 +3,7 @@ package sanntid
 type Line struct {
 	Name        string
 	Destination string
+	Direction   int
 }
 
 type Arrival struct {
@@ -21,6 +22,7 @@ func GetArrivals(locationId int) ([]Arrival, error) {
 			line := Line{
 				data[i].MonitoredVehicleJourney.PublishedLineName,
 				data[i].MonitoredVehicleJourney.DestinationName,
+				data[i].MonitoredVehicleJourney.DirectionRef,
 			}
 			arrival := Arrival{
 				line,

@@ -7,6 +7,10 @@ import (
 	"net/http"
 )
 
+// sanntidDirection defines the direction of the vehicle. It is either,
+// 0 (undefined (?)), 1 or 2.
+type sanntidDirection int
+
 type sanntidMonitoredCall struct {
 	ExpectedArrivalTime   string
 	DeparturePlatformName string
@@ -18,6 +22,7 @@ type sanntidMonitoredVehicleJourney struct {
 	MonitoredCall     sanntidMonitoredCall
 	PublishedLineName string
 	VehicleMode       int
+	DirectionRef      sanntidDirection `json:",string"`
 }
 
 // ArrivalData cointains the parsed data returned from a request to

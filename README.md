@@ -28,12 +28,12 @@ data, err := sanntid.GetArrivals(3010536)
 
 ### API
 
-#### `GetArrivals(int) ([]Arrival, error)`
+#### `GetArrivals(int, sanntidDirection) ([]Arrival, error)`
 
 Retrieve the arrivals for a specific location based on the location ID, which can be found in the [Ruter API](http://labs.trafikanten.no/how-to-use-the-api.aspx). It returns a slice of `Arrival` type or an `error` if an error occurred.
 
 ```go
-data, err := sanntid.GetArrivals(3010536)
+data, err := sanntid.GetArrivals(3010536, sanntid.DirAny)
 
 if err == nil {
 	for i := 0; i < len(data); i++ {
@@ -61,6 +61,7 @@ type Arrival struct {
 type Line struct {
 	Name string
 	Destination string
+	Direction sanntidDirection
 }
 ```
 

@@ -1,11 +1,12 @@
 package sanntid
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 )
 
 func TestParseArrivalData(t *testing.T) {
+	ruter := Ruter{}
 	exampleContent := []byte(`[
 	{
 		"RecordedAtTime":"2015-02-27T12:29:41.618+01:00",
@@ -72,7 +73,7 @@ func TestParseArrivalData(t *testing.T) {
 		},
 	}
 
-	result := parseArrivalData(exampleContent)[0]
+	result := ruter.parseArrivalData(exampleContent)[0]
 
 	if !reflect.DeepEqual(expected, result) {
 		t.Errorf(

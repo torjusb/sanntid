@@ -5,6 +5,19 @@ import (
 	"testing"
 )
 
+func TestArrivalDataUrl(t *testing.T) {
+	ruter := Ruter{}
+	expected := "http://reisapi.ruter.no/stopvisit/getdepartures/12345"
+	result := ruter.arrivalDataUrl(12345)
+
+	if expected != result {
+		t.Errorf(
+			"Expected URL == %q (got: %q)",
+			expected,
+			result)
+	}
+}
+
 func TestParseArrivalData(t *testing.T) {
 	ruter := Ruter{}
 	exampleContent := []byte(`[

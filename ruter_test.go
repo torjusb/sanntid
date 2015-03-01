@@ -1,6 +1,9 @@
 package sanntid
 
-import "testing"
+import (
+	"testing"
+	"reflect"
+)
 
 func TestParseArrivalData(t *testing.T) {
 	exampleContent := []byte(`[
@@ -71,10 +74,10 @@ func TestParseArrivalData(t *testing.T) {
 
 	result := parseArrivalData(exampleContent)[0]
 
-	if result.MonitoredVehicleJourney.DestinationName != expected.MonitoredVehicleJourney.DestinationName {
+	if !reflect.DeepEqual(expected, result) {
 		t.Errorf(
-			"Expected MonitoredVehicleJourney.DestinationName == %q (got: %q)",
-			expected.MonitoredVehicleJourney.DestinationName,
-			result.MonitoredVehicleJourney.DestinationName)
+			"Expected result == %q (got: %q)",
+			expected,
+			result)
 	}
 }

@@ -34,11 +34,19 @@ type sanntidArrivalData struct {
 // Ruter
 type Ruter struct{}
 
+// Get the arrival data for a specific location ID
+func (ruter *Ruter) GetArrivalData(locationID int) ([]sanntidArrivalData, error) {
+	return ruter.requestArrivalData(ruter.arrivalDataUrl(locationID))
+}
+
+// Construct the arrival data URL
+func (ruter *Ruter) arrivalDataUrl(locationID int) string {
+	return fmt.Sprintf("http://reisapi.ruter.no/stopvisit/getdepartures/%d", locationID)
+}
+
 // RequestArrivalData retrieves information about the upcoming arrivals for
 // a given location based on its locationId.
-func (ruter *Ruter) requestArrivalData(locationID int) ([]sanntidArrivalData, error) {
-	url := fmt.Sprintf("http://reisapi.ruter.no/stopvisit/getdepartures/%d", locationID)
-
+func (ruter *Ruter) requestArrivalData(url string) ([]sanntidArrivalData, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err

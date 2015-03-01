@@ -31,27 +31,24 @@ type sanntidArrivalData struct {
 	MonitoredVehicleJourney sanntidMonitoredVehicleJourney
 }
 
-// Ruter
-type Ruter struct{}
-
 // Get the arrival data for a specific location ID
-func (ruter *Ruter) GetArrivalData(locationID int) ([]sanntidArrivalData, error) {
-	data, err := ruter.requestArrivalData(ruter.arrivalDataUrl(locationID))
+func GetArrivalData(locationID int) ([]sanntidArrivalData, error) {
+	data, err := requestArrivalData(arrivalDataUrl(locationID))
 	if err != nil {
 		return nil, err
 	}
 
-	return ruter.parseArrivalData(data), nil
+	return parseArrivalData(data), nil
 }
 
 // Construct the arrival data URL
-func (ruter *Ruter) arrivalDataUrl(locationID int) string {
+func arrivalDataUrl(locationID int) string {
 	return fmt.Sprintf("http://reisapi.ruter.no/stopvisit/getdepartures/%d", locationID)
 }
 
 // RequestArrivalData retrieves information about the upcoming arrivals for
 // a given location based on its locationId.
-func (ruter *Ruter) requestArrivalData(url string) ([]byte, error) {
+func requestArrivalData(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -61,7 +58,7 @@ func (ruter *Ruter) requestArrivalData(url string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-func (ruter *Ruter) parseArrivalData(content []byte) []sanntidArrivalData {
+func parseArrivalData(content []byte) []sanntidArrivalData {
 	var data []sanntidArrivalData
 
 	json.Unmarshal(content, &data)

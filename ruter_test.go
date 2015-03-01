@@ -9,9 +9,8 @@ import (
 )
 
 func TestArrivalDataUrl(t *testing.T) {
-	ruter := Ruter{}
 	expected := "http://reisapi.ruter.no/stopvisit/getdepartures/12345"
-	result := ruter.arrivalDataUrl(12345)
+	result := arrivalDataUrl(12345)
 
 	if expected != result {
 		t.Errorf(
@@ -22,7 +21,6 @@ func TestArrivalDataUrl(t *testing.T) {
 }
 
 func TestRequestArrivalData(t *testing.T) {
-	ruter := Ruter{}
 	exampleText := "Ruter API lol"
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, exampleText)
@@ -30,7 +28,7 @@ func TestRequestArrivalData(t *testing.T) {
 	defer ts.Close()
 
 	expected := []byte(exampleText)
-	result, _ := ruter.requestArrivalData(ts.URL)
+	result, _ := requestArrivalData(ts.URL)
 
 	if !reflect.DeepEqual(expected, result) {
 		t.Errorf(
@@ -41,7 +39,6 @@ func TestRequestArrivalData(t *testing.T) {
 }
 
 func TestParseArrivalData(t *testing.T) {
-	ruter := Ruter{}
 	exampleContent := []byte(`[
 	{
 		"RecordedAtTime":"2015-02-27T12:29:41.618+01:00",
@@ -108,7 +105,7 @@ func TestParseArrivalData(t *testing.T) {
 		},
 	}
 
-	result := ruter.parseArrivalData(exampleContent)[0]
+	result := parseArrivalData(exampleContent)[0]
 
 	if !reflect.DeepEqual(expected, result) {
 		t.Errorf(

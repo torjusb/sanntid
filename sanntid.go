@@ -26,8 +26,7 @@ type Arrival struct {
 func GetArrivals(locationId int, direction sanntidDirection) ([]Arrival, error) {
 	var arrivals []Arrival
 
-	ruter := Ruter{}
-	data, err := ruter.GetArrivalData(locationId)
+	data, err := GetArrivalData(locationId)
 
 	if err == nil {
 		for i := 0; i < len(data); i++ {

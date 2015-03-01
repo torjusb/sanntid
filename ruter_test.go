@@ -1,6 +1,9 @@
 package sanntid
 
 import (
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 )
@@ -13,6 +16,25 @@ func TestArrivalDataUrl(t *testing.T) {
 	if expected != result {
 		t.Errorf(
 			"Expected URL == %q (got: %q)",
+			expected,
+			result)
+	}
+}
+
+func TestRequestArrivalData(t *testing.T) {
+	ruter := Ruter{}
+	exampleText := "Ruter API lol"
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, exampleText)
+	}))
+	defer ts.Close()
+
+	expected := []byte(exampleText)
+	result, _ := ruter.requestArrivalData(ts.URL)
+
+	if !reflect.DeepEqual(expected, result) {
+		t.Errorf(
+			"Expected result == %q (got: %q)",
 			expected,
 			result)
 	}

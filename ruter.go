@@ -36,7 +36,12 @@ type Ruter struct{}
 
 // Get the arrival data for a specific location ID
 func (ruter *Ruter) GetArrivalData(locationID int) ([]sanntidArrivalData, error) {
-	return ruter.requestArrivalData(ruter.arrivalDataUrl(locationID))
+	data, err := ruter.requestArrivalData(ruter.arrivalDataUrl(locationID))
+	if err != nil {
+		return nil, err
+	}
+
+	return ruter.parseArrivalData(data), nil
 }
 
 // Construct the arrival data URL
@@ -46,19 +51,14 @@ func (ruter *Ruter) arrivalDataUrl(locationID int) string {
 
 // RequestArrivalData retrieves information about the upcoming arrivals for
 // a given location based on its locationId.
-func (ruter *Ruter) requestArrivalData(url string) ([]sanntidArrivalData, error) {
+func (ruter *Ruter) requestArrivalData(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return ruter.parseArrivalData(body), err
+	return ioutil.ReadAll(resp.Body)
 }
 
 func (ruter *Ruter) parseArrivalData(content []byte) []sanntidArrivalData {

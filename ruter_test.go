@@ -1,6 +1,42 @@
 package sanntid
 
-import "testing"
+import (
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"reflect"
+	"testing"
+)
+
+func TestArrivalDataUrl(t *testing.T) {
+	expected := "http://reisapi.ruter.no/stopvisit/getdepartures/12345"
+	result := arrivalDataUrl(12345)
+
+	if expected != result {
+		t.Errorf(
+			"Expected URL == %q (got: %q)",
+			expected,
+			result)
+	}
+}
+
+func TestRequestArrivalData(t *testing.T) {
+	exampleText := "Ruter API lol"
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, exampleText)
+	}))
+	defer ts.Close()
+
+	expected := []byte(exampleText)
+	result, _ := requestArrivalData(ts.URL)
+
+	if !reflect.DeepEqual(expected, result) {
+		t.Errorf(
+			"Expected result == %q (got: %q)",
+			expected,
+			result)
+	}
+}
 
 func TestParseArrivalData(t *testing.T) {
 	exampleContent := []byte(`[
@@ -71,10 +107,10 @@ func TestParseArrivalData(t *testing.T) {
 
 	result := parseArrivalData(exampleContent)[0]
 
-	if result.MonitoredVehicleJourney.DestinationName != expected.MonitoredVehicleJourney.DestinationName {
+	if !reflect.DeepEqual(expected, result) {
 		t.Errorf(
-			"Expected MonitoredVehicleJourney.DestinationName == %q (got: %q)",
-			expected.MonitoredVehicleJourney.DestinationName,
-			result.MonitoredVehicleJourney.DestinationName)
+			"Expected result == %q (got: %q)",
+			expected,
+			result)
 	}
 }

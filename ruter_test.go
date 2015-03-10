@@ -65,7 +65,7 @@ func TestParseArrivalData(t *testing.T) {
 			},
 			"20",
 			0,
-			2,
+			sanntidDirection(2),
 		},
 	}
 
